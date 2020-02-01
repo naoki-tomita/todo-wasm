@@ -1,0 +1,2 @@
+default:
+	cargo-web start

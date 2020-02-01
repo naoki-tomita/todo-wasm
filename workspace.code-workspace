@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "server"
+		},
+		{
+			"path": "simple/app"
+		},
+		{
+			"path": "simple/lib"
+		},
+		{
+			"path": "full-app"
+		}
+	]
+}
