@@ -1,10 +1,10 @@
+use yew::Html;
 use yew::services::ConsoleService;
-use yew::{Component, ComponentLink, html, InputData, Properties, Callback};
+use yew::{html, Callback, Component, ComponentLink, InputData, Properties};
 
 pub struct TodoInput {
     text: String,
     link: ComponentLink<Self>,
-    console: ConsoleService,
     props: Props,
 }
 
@@ -17,33 +17,35 @@ pub enum Msg {
 #[derive(Properties, Clone)]
 pub struct Props {
     #[props(required)]
-    pub oncomplete: Callback<String>
+    pub oncomplete: Callback<String>,
 }
-
 
 impl Component for TodoInput {
     type Message = Msg;
     type Properties = Props;
-    fn create(
-        props: Props,
-        link: yew::html::ComponentLink<Self>,
-    ) -> Self {
-        TodoInput { link, text: "".to_string(), console: ConsoleService::new(), props }
+
+    fn create(props: Props, link: yew::html::ComponentLink<Self>) -> Self {
+        TodoInput {
+            link,
+            text: "".to_string(),
+            props,
+        }
     }
+
     fn update(&mut self, message: <Self as yew::html::Component>::Message) -> bool {
-        self.console.log(format!("{:?}", message).as_str());
         match message {
             Msg::Input(text) => {
                 self.text = text;
                 true
-            },
+            }
             Msg::Complete => {
                 self.props.oncomplete.emit(self.text.clone());
                 true
             }
         }
     }
-    fn view(&self) -> yew::virtual_dom::vnode::VNode {
+
+    fn view(&self) -> Html {
         html! {
             <div>
                 <input
@@ -56,5 +58,4 @@ impl Component for TodoInput {
             </div>
         }
     }
-
 }

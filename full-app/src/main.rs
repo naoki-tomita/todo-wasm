@@ -1,4 +1,5 @@
 mod components;
+mod models;
 use crate::components::app::App;
 
 fn main() {
