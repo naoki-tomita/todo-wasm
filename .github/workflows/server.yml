@@ -26,5 +26,6 @@ jobs:
         ./server/target/debug/server &
         pid=$!
         cd ./e2e/server
+        yarn
         yarn test
         kill $!
