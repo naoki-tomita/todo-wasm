@@ -1,0 +1,26 @@
+name: server
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      working-directory: ./server
+      run: cargo build
+    - name: Run tests
+      working-directory: ./server
+      run: cargo test --verbose
+    - name: Run e2e
+      run: |
+        ./server/target/debug/server &
+        pid=$!
+        cd ../e2e/server
+        yarn test
+        kill $!
