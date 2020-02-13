@@ -1,3 +1,5 @@
+
+pub struct Id(pub usize);
 pub struct Description(pub String);
 
 #[derive(PartialEq)]
@@ -7,13 +9,15 @@ pub enum Stat {
 }
 
 pub struct Todo {
+    pub id: Id,
     pub text: Description,
     pub done: Stat,
 }
 
 impl Todo {
-    pub fn new(text: String, done: bool) -> Self {
+    pub fn new(id: usize, text: String, done: bool) -> Self {
         Todo {
+            id: Id(id),
             text: Description(text),
             done: if done { Stat::Done } else { Stat::UnDone },
         }
