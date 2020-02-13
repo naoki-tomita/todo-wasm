@@ -1,5 +1,4 @@
 use crate::error::{Error, ErrorKind};
-use std::collections::HashMap;
 use std::sync::RwLock;
 
 lazy_static! {
@@ -31,7 +30,7 @@ pub fn register(text: String, done: bool) -> Result<TodoEntity, Error> {
 pub fn update(id: usize, text: Option<String>, done: Option<bool>) -> Result<TodoEntity, Error> {
     // writeで書き込み可で(mutとして)アクセスできる
     let mut list = DATUM.write().unwrap();
-    if let Some(todo) = list.get_mut(id + 1) {
+    if let Some(todo) = list.get_mut(id - 1) {
         *todo = TodoEntity {
             id,
             text: text.map_or((*todo).text.clone(), |t| t),
@@ -39,9 +38,7 @@ pub fn update(id: usize, text: Option<String>, done: Option<bool>) -> Result<Tod
         };
         return Ok((*todo).clone());
     }
-    Err(Error::from(ErrorKind::NotFound {
-        url: "Error".to_string(),
-    }))
+    Err(Error::from(ErrorKind::NotFound))
 }
 
 #[derive(Clone)]

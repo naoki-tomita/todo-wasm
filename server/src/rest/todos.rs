@@ -1,9 +1,10 @@
 use crate::domains::todo::{Description, Id, Stat, Todo};
 use crate::gateways::todo_gateway::TodoGateway;
 use crate::usecases::{get_todo_list, register_todo, update_todo};
-use rocket::response::status::Created;
+use rocket::response::status::{Created, NotFound};
 use rocket_contrib::json::Json;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize)]
 pub struct TodosJson {
@@ -70,7 +71,7 @@ pub fn post(todo: Json<TodoRegisterJson>) -> Created<Json<TodoJson>> {
 }
 
 #[put("/todos/<id>", data = "<todo>")]
-pub fn put(id: usize, todo: Json<TodoUpdateJson>) -> Json<TodoJson> {
+pub fn put(id: usize, todo: Json<TodoUpdateJson>) -> Result<Json<TodoJson>, NotFound<Json<HashMap<String, String>>>> {
     let port = TODO_PORT.clone();
     let result = update_todo::execute(
         port,
@@ -82,11 +83,15 @@ pub fn put(id: usize, todo: Json<TodoUpdateJson>) -> Json<TodoJson> {
             .map_or(None, |d| Some(if d { Stat::Done } else { Stat::UnDone })),
     );
     match result {
-        Ok(data) => Json(TodoJson {
+        Ok(data) => Ok(Json(TodoJson {
             id: data.id.0,
             text: data.todo.text.0.clone(),
             done: data.todo.done == Stat::Done,
-        }),
-        Err(e) => panic!(format!("{:?}", e)),
+        })),
+        Err(e) => {
+            let mut err: HashMap<String, String> = HashMap::new();
+            err.insert("error".to_string(), format!("{:?}", e));
+            Err(NotFound(Json(err)))
+        },
     }
 }

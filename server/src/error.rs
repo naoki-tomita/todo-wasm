@@ -52,8 +52,8 @@ impl From<Context<ErrorKind>> for Error {
 pub enum ErrorKind {
     #[fail(display = "An internal error occurred. Please try again later.")]
     InternalServerError,
-    #[fail(display = "Not Found. url: {}", url)]
-    NotFound { url: String },
+    #[fail(display = "Not Found.")]
+    NotFound,
     #[fail(display = "Bad Request. url: {}", url)]
     BadRequest { url: String },
 }

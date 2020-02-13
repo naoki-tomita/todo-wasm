@@ -1,0 +1,19 @@
+{
+  "values": [
+    {
+      "id": 1,
+      "text": "Todoを更新できるようにする",
+      "done": true
+    },
+    {
+      "id": 2,
+      "text": "Hello1",
+      "done": false
+    },
+    {
+      "id": 3,
+      "text": "Good1",
+      "done": false
+    }
+  ]
+}
