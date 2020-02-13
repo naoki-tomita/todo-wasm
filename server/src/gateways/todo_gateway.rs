@@ -1,4 +1,4 @@
-use crate::domains::todo::{Stat, Todo, Todos};
+use crate::domains::todo::{Description, Todo, Todos};
 use crate::drivers::todo_driver;
 use crate::drivers::todo_driver::TodoEntity;
 use crate::error::Error;
@@ -11,10 +11,10 @@ impl TodoPort for TodoGateway {
     fn get_list(&self) -> Result<Todos, Error> {
         Ok(Todos::from(todo_driver::get_todos()?))
     }
-    fn register(&self, todo: Todo) -> std::result::Result<Todo, Error> {
+    fn register(&self, text: Description) -> std::result::Result<Todo, Error> {
         Ok(Todo::from(todo_driver::register(
-            todo.text.0,
-            todo.done == Stat::Done,
+            text.0,
+            false,
         )?))
     }
 }
@@ -27,6 +27,6 @@ impl Todos {
 
 impl Todo {
     fn from(value: TodoEntity) -> Self {
-        Todo::new(value.text, value.done)
+        Todo::new(value.id, value.text, value.done)
     }
 }

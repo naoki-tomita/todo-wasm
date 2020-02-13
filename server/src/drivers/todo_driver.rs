@@ -32,21 +32,6 @@ pub fn test_clear() {
     // writeで書き込み可で(mutとして)アクセスできる
     let mut list = DATUM.write().unwrap();
     (*list).clear();
-    (*list).push(TodoEntity {
-        id: 1,
-        text: "Todo1".to_string(),
-        done: false,
-    });
-    (*list).push(TodoEntity {
-        id: 2,
-        text: "Hello1".to_string(),
-        done: false,
-    });
-    (*list).push(TodoEntity {
-        id: 3,
-        text: "Good1".to_string(),
-        done: false,
-    });
 }
 
 pub fn test_register_data() {

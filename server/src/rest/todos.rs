@@ -13,6 +13,7 @@ pub struct TodosJson {
 
 #[derive(Serialize, Deserialize)]
 pub struct TodoJson {
+    id: usize,
     text: String,
     done: bool,
 }
@@ -36,6 +37,7 @@ pub fn get() -> Json<TodosJson> {
                 .values
                 .iter()
                 .map(|todo| TodoJson {
+                    id: todo.id.0,
                     text: todo.text.0.clone(),
                     done: todo.done == Stat::Done,
                 })
@@ -48,15 +50,12 @@ pub fn get() -> Json<TodosJson> {
 #[post("/todos", data = "<todo>")]
 pub fn post(todo: Json<TodoInputJson>) -> Created<Json<TodoJson>> {
     let port = TODO_PORT.clone();
-    let body = Todo {
-        text: Description(todo.text.clone()),
-        done: Stat::Done,
-    };
-    let result = register_todo::execute(port, body);
+    let result = register_todo::execute(port, Description(todo.text.clone()));
     match result {
         Ok(todo) => Created(
             "path".to_string(),
             Some(Json(TodoJson {
+                id: todo.id.0,
                 text: todo.text.0.clone(),
                 done: todo.done == Stat::Done,
             })),

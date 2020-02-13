@@ -2,14 +2,14 @@ name: server
 
 on:
   push:
+    branches:
+      - master
   pull_request:
     types: [opened, synchronize]
 
 jobs:
-  build:
-
+  e2e:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Cache cargo registry
