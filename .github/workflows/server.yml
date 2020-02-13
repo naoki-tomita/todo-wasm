@@ -12,12 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: hecrj/setup-rust-action@v1
-      with:
-        rust-version: nightly
-    - name: Build
-      working-directory: ./server
-      run: cargo build
     - name: Cache cargo registry
       uses: actions/cache@v1
       with:
@@ -33,6 +27,12 @@ jobs:
       with:
         path: server/target
         key: cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+    - uses: hecrj/setup-rust-action@v1
+      with:
+        rust-version: nightly
+    - name: Build
+      working-directory: ./server
+      run: cargo build
     - name: Run tests
       working-directory: ./server
       run: cargo test --verbose
