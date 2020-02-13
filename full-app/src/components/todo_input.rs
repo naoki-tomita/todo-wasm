@@ -1,5 +1,5 @@
-use yew::Html;
 use yew::services::ConsoleService;
+use yew::Html;
 use yew::{html, Callback, Component, ComponentLink, InputData, Properties};
 
 pub struct TodoInput {
@@ -47,14 +47,14 @@ impl Component for TodoInput {
 
     fn view(&self) -> Html {
         html! {
-            <div>
-                <input
+            <div class="row">
+                <input class="col s9"
                     value=self.text
                     oninput=self.link.callback(|e: InputData| Msg::Input(e.value))
                 />
-                <button
+                <a class="col s3 waves-effect waves-light btn"
                     onclick=self.link.callback(|_| Msg::Complete)
-                >{"Add todo"}</button>
+                >{"ADD TODO"}</a>
             </div>
         }
     }
