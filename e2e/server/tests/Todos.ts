@@ -1,5 +1,5 @@
 
-import { Step, DataStoreFactory, BeforeSpec } from "gauge-ts";
+import { Step, DataStoreFactory, BeforeSpec, BeforeScenario } from "gauge-ts";
 import { strict } from "assert";
 import fetch from "node-fetch";
 import { Config } from "./Config";
@@ -13,7 +13,7 @@ export default class TodosStep {
     await fetch(`${Config.baseUrl}/v1/test/register`, { method: "post" });
   }
 
-  @BeforeSpec({ tags: ["clear"] })
+  @BeforeScenario({ tags: ["clear"] })
   async clearTestData() {
     await fetch(`${Config.baseUrl}/v1/test/clear`, { method: "post" });
   }
@@ -29,6 +29,19 @@ export default class TodosStep {
   async registerTodo(file: string) {
     const result = await fetch(`${Config.baseUrl}/v1/todos`, {
       method: "post",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: await readFileAsync(`resources/setup/${file}.json`)
+    });
+    DataStoreFactory.getScenarioDataStore().put("status", result.status);
+    DataStoreFactory.getScenarioDataStore().put("body", await result.json());
+  }
+
+  @Step("Todoのid<id>を<file>で更新するリクエストを実行する")
+  public async updateTodo(id: string, file: any) {
+    const result = await fetch(`${Config.baseUrl}/v1/todos/${id}`, {
+      method: "put",
       headers: {
         "content-type": "application/json"
       },
