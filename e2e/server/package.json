@@ -1,0 +1,20 @@
+{
+  "name": "gauge-ts-template",
+  "version": "0.0.1",
+  "description": "Starter template for writing TypeScript tests for Gauge",
+  "dependencies": {
+    "gauge-ts": "latest",
+    "node-fetch": "^2.6.0",
+    "ts-node": "latest",
+    "typescript": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/node-fetch": "^2.5.4"
+  },
+  "scripts": {
+    "test": "gauge run specs"
+  },
+  "main": "index.js",
+  "license": "MIT"
+}
