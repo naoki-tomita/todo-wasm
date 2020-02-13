@@ -8,7 +8,7 @@ const { deepEqual } = strict;
 
 export default class TodosStep {
 
-  @BeforeSpec({ tags: ["register"] })
+  @BeforeScenario({ tags: ["register"] })
   async registerTestData() {
     await fetch(`${Config.baseUrl}/v1/test/register`, { method: "post" });
   }

@@ -1,4 +1,4 @@
-use crate::error::Error;
+use crate::error::{Error, ErrorKind};
 use std::collections::HashMap;
 use std::sync::RwLock;
 
@@ -28,6 +28,30 @@ pub fn register(text: String, done: bool) -> Result<TodoEntity, Error> {
     Ok(todo)
 }
 
+pub fn update(id: usize, text: Option<String>, done: Option<bool>) -> Result<TodoEntity, Error> {
+    // writeで書き込み可で(mutとして)アクセスできる
+    let mut list = DATUM.write().unwrap();
+    if let Some(todo) = list.get_mut(id + 1) {
+        *todo = TodoEntity {
+            id,
+            text: text.map_or((*todo).text.clone(), |t| t),
+            done: done.map_or((*todo).done, |d| d),
+        };
+        return Ok((*todo).clone());
+    }
+    Err(Error::from(ErrorKind::NotFound {
+        url: "Error".to_string(),
+    }))
+}
+
+#[derive(Clone)]
+pub struct TodoEntity {
+    pub id: usize,
+    pub text: String,
+    pub done: bool,
+}
+
+// for e2e
 pub fn test_clear() {
     // writeで書き込み可で(mutとして)アクセスできる
     let mut list = DATUM.write().unwrap();
@@ -53,12 +77,4 @@ pub fn test_register_data() {
         text: "Good1".to_string(),
         done: false,
     });
-}
-
-
-#[derive(Clone)]
-pub struct TodoEntity {
-    pub id: usize,
-    pub text: String,
-    pub done: bool,
 }

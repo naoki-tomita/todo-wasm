@@ -1,7 +1,13 @@
-use crate::domains::todo::{Todo, Todos, Description};
+use crate::domains::todo::{Description, Id, IdentifiedTodo, IdentifiedTodos, Stat, Todo, Todos};
 use crate::error::Error;
 
 pub trait TodoPort {
-    fn get_list(&self) -> Result<Todos, Error>;
-    fn register(&self, text: Description) -> Result<Todo, Error>;
+    fn get_list(&self) -> Result<IdentifiedTodos, Error>;
+    fn register(&self, text: Description) -> Result<IdentifiedTodo, Error>;
+    fn update(
+        &self,
+        id: Id,
+        text: Option<Description>,
+        done: Option<Stat>,
+    ) -> Result<IdentifiedTodo, Error>;
 }
