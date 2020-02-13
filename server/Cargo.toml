@@ -6,3 +6,8 @@ edition = "2018"
 
 [dependencies]
 rocket = "0.4.2"
+rocket_contrib = "0.4.2"
+serde = { version = "1.0", features = ["derive"] }
+async-trait = "0.1.22"
+failure = "0.1.6"
+lazy_static = "1.4.0"

@@ -1,12 +1,21 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
-#[macro_use] extern crate rocket;
+#[macro_use]
+extern crate lazy_static;
 
-#[get("/hello/<name>/<age>")]
-fn hello(name: String, age: u8) -> String {
-    format!("Hello, {} year old named {}!", age, name)
-}
+use crate::rest::routes::start_server;
+
+mod domains;
+mod drivers;
+mod error;
+mod gateways;
+mod ports;
+mod rest;
+mod usecases;
+
+#[macro_use]
+extern crate rocket;
 
 fn main() {
-    rocket::ignite().mount("/", routes![hello]).launch();
+    start_server()
 }
