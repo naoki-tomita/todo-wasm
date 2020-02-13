@@ -26,7 +26,12 @@ jobs:
       uses: actions/cache@v1
       with:
         path: server/target
-        key: cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+        key: server-target-${{ hashFiles('server/Cargo.lock') }}
+    - name: Cache node modules
+      uses: actions/cache@v1
+      with:
+        path: e2e/server/node_modules
+        key: e2e-server-node_modules-${{ hashFiles('e2e/server/yarn.lock') }}
     - uses: hecrj/setup-rust-action@v1
       with:
         rust-version: nightly
