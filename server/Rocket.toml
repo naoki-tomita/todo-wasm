@@ -1,11 +1,3 @@
-[development]
-port = 8001
-address = "0.0.0.0"
-
-[staging]
-port = 8001
-address = "0.0.0.0"
-
 [production]
 port = 8001
 address = "0.0.0.0"
