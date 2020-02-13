@@ -17,6 +17,11 @@ pub struct TodoJson {
     done: bool,
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct TodoInputJson {
+    text: String
+}
+
 lazy_static! {
     static ref TODO_PORT: TodoGateway = { TodoGateway {} };
 }
@@ -40,11 +45,11 @@ pub fn get() -> Json<TodosJson> {
     }
 }
 
-#[post("/todos")]
-pub fn post() -> Created<Json<TodoJson>> {
+#[post("/todos", data = "<todo>")]
+pub fn post(todo: Json<TodoInputJson>) -> Created<Json<TodoJson>> {
     let port = TODO_PORT.clone();
     let body = Todo {
-        text: Description("foo".to_string()),
+        text: Description(todo.text.clone()),
         done: Stat::Done,
     };
     let result = register_todo::execute(port, body);
