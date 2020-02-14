@@ -51,7 +51,7 @@ impl Component for TodoInput {
     fn view(&self) -> Html {
         html! {
             <div class="row">
-                <input class="col s9"
+                <input type="text" class="col s9"
                     value=self.text
                     oninput=self.link.callback(|e: InputData| Msg::Input(e.value))
                 />
