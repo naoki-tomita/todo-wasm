@@ -1,11 +1,12 @@
 use crate::components::todo_input::TodoInput;
 use crate::components::todo_list::TodoList;
 use crate::models::todo::{Todo, Todos};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+use serde_json::json;
 use yew::format::Json;
 use yew::format::Nothing;
 use yew::services::fetch::{FetchTask, Request, Response};
-use yew::services::{ConsoleService, FetchService};
+use yew::services::{FetchService};
 use yew::{html, Component, ComponentLink, Html, ShouldRender};
 
 pub struct App {
@@ -19,6 +20,7 @@ pub enum Msg {
     AddTodo(String),
     DoneChange(usize),
     FetchedTodo(Todos),
+    UpdatedTodos,
     Noop,
 }
 
@@ -35,25 +37,26 @@ impl Component for App {
     }
 
     fn mounted(&mut self) -> bool {
-        self.update_data();
+        self.load();
         false
     }
 
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
-        ConsoleService::new().log(format!("{:?}", self.todos).as_str());
         match msg {
+            Msg::UpdatedTodos => {
+                self.load();
+                false
+            }
             Msg::AddTodo(text) => {
-                self.todos.push(text);
+                self.register_data(text);
                 true
             }
-            Msg::DoneChange(index) => {
-                self.on_done_change(index);
-                ConsoleService::new().log(format!("{:?}", self.todos).as_str());
+            Msg::DoneChange(id) => {
+                self.update_data(id);
                 true
             }
             Msg::FetchedTodo(todos) => {
                 self.task = None;
-                ConsoleService::new().log(format!("{:?}", todos).as_str());
                 self.todos = todos;
                 true
             }
@@ -62,9 +65,8 @@ impl Component for App {
     }
 
     fn view(&self) -> Html {
-        ConsoleService::new().log(format!("{:?}", self.todos).as_str());
         html! {
-            <div class="container">
+            <div class="container" style="padding-top: 20px">
                 <TodoInput oncomplete=self.link.callback(|text| Msg::AddTodo(text)) />
                 <TodoList list=&self.todos ondonechange=self.link.callback(|e| Msg::DoneChange(e)) />
             </div>
@@ -73,12 +75,7 @@ impl Component for App {
 }
 
 impl App {
-    fn on_done_change(&mut self, index: usize) {
-        ConsoleService::new().log(format!("{:?}", self.todos).as_str());
-        self.todos.switch(index)
-    }
-
-    fn update_data(&mut self) {
+    fn load(&mut self) {
         let request = Request::get("http://localhost/v1/todos")
             .body(Nothing)
             .expect("Failed to build request.");
@@ -97,6 +94,41 @@ impl App {
             ),
         ));
     }
+
+    fn register_data(&mut self, text: String) {
+        let json = &json!({ "text": text });
+        let request = Request::post("http://localhost/v1/todos")
+            .body(Json(json))
+            .expect("Failed to build request.");
+
+        self.task = Some(
+            FetchService::new().fetch(
+                request,
+                self.link
+                    .callback(|_: Response<Result<String, failure::Error>>| Msg::UpdatedTodos),
+            ),
+        );
+    }
+
+    fn update_data(&mut self, id: usize) {
+        match self.todos.find(id) {
+            Some(it) => {
+                let json = &json!({ "done": !it.done });
+                let request = Request::put(format!("http://localhost/v1/todos/{}", id))
+                    .body(Json(json))
+                    .expect("Failed to build request.");
+
+                self.task = Some(
+                    FetchService::new().fetch(
+                        request,
+                        self.link
+                            .callback(|_: Response<Result<String, failure::Error>>| Msg::UpdatedTodos),
+                    ),
+                );
+            },
+            _ => return
+        }
+    }
 }
 
 #[derive(Deserialize)]
@@ -111,6 +143,7 @@ impl TodosJson {
                 .values
                 .iter()
                 .map(|it| Todo {
+                    id: it.id,
                     text: it.text.clone(),
                     done: it.done,
                 })
@@ -121,6 +154,12 @@ impl TodosJson {
 
 #[derive(Deserialize)]
 pub struct TodoJson {
+    id: usize,
     text: String,
     done: bool,
+}
+
+#[derive(Serialize)]
+pub struct TodoRequestJson {
+    text: String,
 }

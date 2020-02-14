@@ -1,4 +1,3 @@
-use yew::services::ConsoleService;
 use yew::Html;
 use yew::{html, Callback, Component, ComponentLink, InputData, Properties};
 
@@ -39,7 +38,11 @@ impl Component for TodoInput {
                 true
             }
             Msg::Complete => {
+                if self.text.is_empty() {
+                    return false;
+                }
                 self.props.oncomplete.emit(self.text.clone());
+                self.text = "".to_string();
                 true
             }
         }
