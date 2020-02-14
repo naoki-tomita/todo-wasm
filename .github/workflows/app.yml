@@ -37,6 +37,9 @@ jobs:
         rust-version: nightly
     - name: install cargo web
       run: cargo install cargo-web
+    - name: install local-web-server
+      working-directory: ./full-app
+      run: yarn add local-web-server
     - name: Build
       working-directory: ./full-app
       run: cargo web deploy
@@ -49,7 +52,7 @@ jobs:
         ./server/target/debug/server &
         s_pid=$!
         cd ./full-app
-        npx ws -d target/deploy/ &
+        ./node_modules/.bin/ws -d target/deploy/ &
         cd ..
         cd ./e2e/app
         yarn
