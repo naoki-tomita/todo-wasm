@@ -43,6 +43,9 @@ jobs:
     - name: Build
       working-directory: ./full-app
       run: cargo web deploy
+    - name: Build
+      working-directory: ./server
+      run: cargo build
     - name: Run e2e
       run: |
         cd ./proxy
