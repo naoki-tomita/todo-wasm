@@ -1,0 +1,55 @@
+name: app
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-${{ hashFiles('**/Cargo.lock') }}
+    - name: Cache cargo build
+      uses: actions/cache@v1
+      with:
+        path: server/target
+        key: server-target-${{ hashFiles('full-app/Cargo.lock') }}
+    - name: Cache node modules
+      uses: actions/cache@v1
+      with:
+        path: e2e/server/node_modules
+        key: e2e-server-node_modules-${{ hashFiles('e2e/server/yarn.lock') }}
+    - uses: hecrj/setup-rust-action@v1
+      with:
+        rust-version: nightly
+    - name: Build
+      working-directory: ./full-app
+      run: cargo web deploy
+    - name: Run e2e
+      run: |
+        cd ./proxy
+        docker build -t proxy .
+        docker run --rm -d -p 80:80 proxy:latest
+        cd ..
+        ./server/target/debug/server &
+        s_pid=$!
+        cd ./full-app
+        npx ws -d target/deploy/ &
+        cd ..
+        cd ./e2e/app
+        yarn
+        yarn test
+        kill $!
