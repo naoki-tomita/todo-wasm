@@ -35,6 +35,8 @@ jobs:
     - uses: hecrj/setup-rust-action@v1
       with:
         rust-version: nightly
+    - name: install cargo web
+      run: cargo install cargo-web
     - name: Build
       working-directory: ./full-app
       run: cargo web deploy
