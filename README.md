@@ -1,4 +1,4 @@
-![server](https://github.com/naoki-tomita/todo-wasm/workflows/server/badge.svg)![app](https://github.com/naoki-tomita/todo-wasm/workflows/app/badge.svg)
+![server](https://github.com/naoki-tomita/todo-wasm/workflows/server/badge.svg) ![app](https://github.com/naoki-tomita/todo-wasm/workflows/app/badge.svg)
 
 # todo-wasm
 Todo app with WebAssembly
