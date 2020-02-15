@@ -17,6 +17,11 @@ jobs:
       with:
         path: ~/.cargo/registry
         key: cargo-app-registry
+    - name: Cache cargo subcommands
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/bin
+        key: cargo-app-bin
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
