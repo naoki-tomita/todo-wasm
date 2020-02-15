@@ -64,6 +64,7 @@ jobs:
         yarn test
         kill $s_pid $a_pid
     - name: Archive screenshot
+      if: always()
       uses: actions/upload-artifact@v1
       with:
         name: app-e2e-screenshots
