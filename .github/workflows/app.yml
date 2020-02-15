@@ -46,7 +46,7 @@ jobs:
       with:
         rust-version: nightly
     - name: install cargo web
-      run: cargo install cargo-web
+      run: cargo install cargo-web || true
     - name: install local-web-server
       working-directory: ./full-app
       run: yarn add local-web-server
