@@ -1,12 +1,11 @@
 
 import { Step, BeforeScenario, AfterScenario, AfterStep } from "gauge-ts";
-import { equal } from "assert";
-import { Browser, launch, Page } from "puppeteer";
 import fetch from "node-fetch";
 import { Config } from "./Config";
-import { writeFile } from "fs";
+import { TodoApp } from "./PageObjects/TodoApp";
+import { waitAndAssert } from "./Utils";
 
-interface Context {
+interface GaugeContext {
   currentSpec: {
     tags: string[];
     name: string;
@@ -26,9 +25,13 @@ interface Context {
   };
 }
 
-export default class Todos {
-  browser: Browser;
-  page: Page;
+const Stat: { [key: string]: boolean } = {
+  "完了": true,
+  "未完了": false
+}
+
+export default class TodosSteps {
+  app: TodoApp;
 
   @BeforeScenario({ tags: ["register"] })
   async registerTestData() {
@@ -37,61 +40,58 @@ export default class Todos {
 
   @AfterScenario()
   async closeApp() {
-    await this.page.close();
+    this.app.close();
   }
 
   @AfterStep()
-  async afterStep(context: Context) {
+  async afterStep(context: GaugeContext) {
     if (context.currentStep.isFailed) {
-      await this.captureScreen(`${context.currentSpec.name}_${context.currentScenario.name}_${context.currentStep.step.actualStepText}`);
+      await this.captureScreen(
+        `${context.currentSpec.name}_${context.currentScenario.name}_${context.currentStep.step.actualStepText}`
+      );
     }
   }
 
   async captureScreen(name: string) {
-    await this.page.screenshot({ path: `./artifacts/${name}.png`.replace(/\"/g, "") });
+    await this.app.page.screenshot({ path: `./artifacts/${name}.png`.replace(/\"/g, "") });
   }
 
   @Step("アプリを起動する")
   public async openApp() {
-    this.browser = await launch();
-    this.page = await this.browser.newPage();
-    await this.page.goto("http://localhost");
+    this.app = await TodoApp.open();
   }
 
   @Step("Todoが<count>件表示されている")
   public async appShowsTodos(countText: string) {
     const count = parseInt(countText, 10);
-    await this.page.waitFor(count => document.querySelectorAll("li").length === count, {}, count);
-    equal((await this.page.$$("li")).length, count);
+    await waitAndAssert(async () => (await this.app.getTodoList()).length, count);
   }
 
   @Step("Todoの<index>件目のテキストが<text>と表示されている")
   public async todoShowsText(indexText: string, text: string) {
     const index = parseInt(indexText);
-    const texts = await Promise.all((await this.page.$$("li span")).map(async it => await (await it.getProperty("textContent")).jsonValue()));
-    equal(texts[index - 1], text);
+    await waitAndAssert(async () => (await this.app.getTodoTexts())[index - 1], text);
   }
 
   @Step("Todoの<index>件目のステータスが<status>状態となっている")
   public async todoStatusIs(indexText: string, status: string) {
     const index = parseInt(indexText);
-    const checkeds = await Promise.all((await this.page.$$("li input")).map(async it => await (await it.getProperty("checked")).jsonValue()));
-    equal(checkeds[index - 1], "完了" == status);
+    await waitAndAssert(async () => (await this.app.getTodoStats())[index - 1], Stat[status]);
   }
 
 	@Step("Todoの入力欄に<text>と入力する")
 	public async inputNewTodoText(text: string) {
-		await this.page.type(`input[type="text"]`, text);
+    await this.app.inputTodoText(text);
 	}
 
   @Step("ADD TODOを押下する")
 	public async clickAddTodo() {
-		await this.page.click(`a.btn`);
+    await this.app.completeTodoText();
   }
 
 	@Step("Todoの<index>件目のステータスを押下する")
 	public async switchStatus(indexText: string) {
     const index = parseInt(indexText, 10);
-    await this.page.click(`li:nth-child(${index}) input`);
+    await this.app.switchStatus(index);
 	}
 }
