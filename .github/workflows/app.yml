@@ -16,27 +16,32 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.cargo/registry
-        key: cargo-app-registry
+        key: cargo-app-registry-${{ hashFiles('**/Cargo.lock') }}
     - name: Cache cargo subcommands
       uses: actions/cache@v1
       with:
         path: ~/.cargo/bin
-        key: cargo-app-bin
+        key: cargo-app-bin-${{ hashFiles('**/Cargo.lock') }}
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
-        key: cargo-app-index
+        key: cargo-app-index-${{ hashFiles('**/Cargo.lock') }}
     - name: Cache cargo build
       uses: actions/cache@v1
       with:
         path: full-app/target
-        key: app-target
+        key: app-target-${{ hashFiles('**/Cargo.lock') }}
+    - name: Cache cargo build for server
+      uses: actions/cache@v1
+      with:
+        path: server/target
+        key: server-target-${{ hashFiles('**/Cargo.lock') }}
     - name: Cache node modules
       uses: actions/cache@v1
       with:
         path: e2e/app/node_modules
-        key: e2e-app-node_modules
+        key: e2e-app-node_modules-${{ hashFiles('e2e/app/yarn.lock') }}
     - uses: hecrj/setup-rust-action@v1
       with:
         rust-version: nightly
