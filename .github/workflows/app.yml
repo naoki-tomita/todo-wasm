@@ -16,22 +16,22 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.cargo/registry
-        key: cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+        key: cargo-app-registry-${{ hashFiles('full-app/Cargo.lock') }}
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
-        key: cargo-index-${{ hashFiles('**/Cargo.lock') }}
+        key: cargo-app-index-${{ hashFiles('full-app/Cargo.lock') }}
     - name: Cache cargo build
       uses: actions/cache@v1
       with:
-        path: app/target
+        path: full-app/target
         key: app-target-${{ hashFiles('full-app/Cargo.lock') }}
     - name: Cache node modules
       uses: actions/cache@v1
       with:
         path: e2e/app/node_modules
-        key: e2e-app-node_modules-${{ hashFiles('e2e/server/yarn.lock') }}
+        key: e2e-app-node_modules-${{ hashFiles('e2e/app/yarn.lock') }}
     - uses: hecrj/setup-rust-action@v1
       with:
         rust-version: nightly
@@ -40,10 +40,10 @@ jobs:
     - name: install local-web-server
       working-directory: ./full-app
       run: yarn add local-web-server
-    - name: Build
+    - name: Build app
       working-directory: ./full-app
       run: cargo web deploy
-    - name: Build
+    - name: Build server
       working-directory: ./server
       run: cargo build
     - name: Run e2e
