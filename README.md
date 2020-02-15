@@ -1,6 +1,26 @@
+![server](https://github.com/naoki-tomita/todo-wasm/workflows/server/badge.svg)![app](https://github.com/naoki-tomita/todo-wasm/workflows/app/badge.svg)
+
 # todo-wasm
 Todo app with WebAssembly
 
-server: ![server](https://github.com/naoki-tomita/todo-wasm/workflows/server/badge.svg)
+# Server
 
-app: ![app](https://github.com/naoki-tomita/todo-wasm/workflows/app/badge.svg)
+* Rust
+* Rocket
+* On memory data
+
+# Application
+
+* Rust 
+* yew
+* materialize
+
+# E2E
+## Server
+
+* gauge-ts
+
+## Application
+
+* gauge-ts
+* puppeteer
