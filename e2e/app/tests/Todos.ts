@@ -48,7 +48,7 @@ export default class Todos {
   }
 
   async captureScreen(name: string) {
-    await this.page.screenshot({ path: `./artifacts/${name}.png` });
+    await this.page.screenshot({ path: `./artifacts/${name}.png`.replace(/\"/g, "") });
   }
 
   @Step("アプリを起動する")
