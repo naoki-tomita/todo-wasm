@@ -1,4 +1,4 @@
-use crate::domains::todo::{Description, IdentifiedTodo, Todo, Todos};
+use crate::domains::todo::{Description, IdentifiedTodo};
 use crate::error::Error;
 use crate::ports::todo_port::TodoPort;
 

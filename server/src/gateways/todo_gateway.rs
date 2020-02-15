@@ -1,6 +1,6 @@
 use crate::domains::todo::Id;
 use crate::domains::todo::Stat;
-use crate::domains::todo::{Description, IdentifiedTodo, IdentifiedTodos, Todo, Todos};
+use crate::domains::todo::{Description, IdentifiedTodo, IdentifiedTodos};
 use crate::drivers::todo_driver;
 use crate::drivers::todo_driver::TodoEntity;
 use crate::error::Error;

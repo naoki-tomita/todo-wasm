@@ -1,4 +1,4 @@
-use crate::domains::todo::{Description, Id, IdentifiedTodo, IdentifiedTodos, Stat, Todo, Todos};
+use crate::domains::todo::{Description, Id, IdentifiedTodo, IdentifiedTodos, Stat};
 use crate::error::Error;
 
 pub trait TodoPort {

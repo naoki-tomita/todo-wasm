@@ -1,4 +1,4 @@
-use crate::domains::todo::{Description, Id, Stat, Todo};
+use crate::domains::todo::{Description, Id, Stat};
 use crate::gateways::todo_gateway::TodoGateway;
 use crate::usecases::{get_todo_list, register_todo, update_todo};
 use rocket::response::status::{Created, NotFound};

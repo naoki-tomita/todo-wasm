@@ -21,15 +21,15 @@ impl Todo {
     }
 }
 
-pub struct Todos {
-    pub values: Vec<Todo>,
-}
+// pub struct Todos {
+//     values: Vec<Todo>,
+// }
 
-impl Todos {
-    pub fn new(values: Vec<Todo>) -> Self {
-        Todos { values }
-    }
-}
+// impl Todos {
+//     pub fn new(values: Vec<Todo>) -> Self {
+//         Todos { values }
+//     }
+// }
 
 pub struct IdentifiedTodo {
     pub id: Id,
