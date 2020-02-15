@@ -58,3 +58,8 @@ jobs:
         yarn
         yarn test
         kill $s_pid $a_pid
+    - name: Archive screenshot
+      uses: actions/upload-artifact@v1
+      with:
+        name: app-e2e-screenshots
+        path: e2e/app/artifacts
