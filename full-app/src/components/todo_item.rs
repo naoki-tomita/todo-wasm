@@ -1,5 +1,4 @@
 use crate::models::todo::Todo;
-use yew::services::ConsoleService;
 use yew::{html, Callback, Component, ComponentLink, Html, Properties};
 
 pub enum Msg {
@@ -10,7 +9,6 @@ pub enum Msg {
 pub struct Props {
     #[props(required)]
     pub item: Todo,
-    pub index: usize,
     #[props(required)]
     pub ondonechange: Callback<usize>,
 }
@@ -28,7 +26,7 @@ impl Component for TodoItem {
     fn update(&mut self, msg: Msg) -> bool {
         match msg {
             Msg::Change => {
-                self.props.ondonechange.emit(self.props.index);
+                self.props.ondonechange.emit(self.props.item.id);
                 true
             }
         }
@@ -40,8 +38,10 @@ impl Component for TodoItem {
     fn view(&self) -> Html {
         html! {
             <li class="collection-item">
-                { &self.props.item.text }
-                <input type="checkbox" checked=self.props.item.done onclick=self.link.callback(|_| Msg::Change) />
+                <label>
+                    <input type="checkbox" checked=self.props.item.done onclick=self.link.callback(|_| Msg::Change) />
+                    <span>{ &self.props.item.text }</span>
+                </label>
             </li>
         }
     }

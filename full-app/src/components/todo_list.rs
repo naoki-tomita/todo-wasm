@@ -29,8 +29,8 @@ impl Component for TodoList {
     }
     fn update(&mut self, msg: Msg) -> bool {
         match msg {
-            Msg::Change(index) => {
-                self.props.ondonechange.emit(index);
+            Msg::Change(id) => {
+                self.props.ondonechange.emit(id);
                 true
             }
         }
@@ -40,11 +40,10 @@ impl Component for TodoList {
         true
     }
     fn view(&self) -> Html {
-        let items = self.props.list.with_index();
         html! {
             <div>
                 <ul class="collection">
-                    { for items.iter().map(|item| self.render_item(&item.0, item.1)) }
+                    { for self.props.list.list.iter().map(|item| self.render_item(&item)) }
                 </ul>
             </div>
         }
@@ -52,9 +51,9 @@ impl Component for TodoList {
 }
 
 impl TodoList {
-    fn render_item(&self, todo: &Todo, index: usize) -> Html {
+    fn render_item(&self, todo: &Todo) -> Html {
         html! {
-            <TodoItem item=todo index=index ondonechange=self.link.callback(|e| Msg::Change(e)) />
+            <TodoItem item=todo ondonechange=self.link.callback(|e| Msg::Change(e)) />
         }
     }
 }

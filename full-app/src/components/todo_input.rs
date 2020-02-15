@@ -1,4 +1,3 @@
-use yew::services::ConsoleService;
 use yew::Html;
 use yew::{html, Callback, Component, ComponentLink, InputData, Properties};
 
@@ -39,7 +38,11 @@ impl Component for TodoInput {
                 true
             }
             Msg::Complete => {
+                if self.text.is_empty() {
+                    return false;
+                }
                 self.props.oncomplete.emit(self.text.clone());
+                self.text = "".to_string();
                 true
             }
         }
@@ -48,7 +51,7 @@ impl Component for TodoInput {
     fn view(&self) -> Html {
         html! {
             <div class="row">
-                <input class="col s9"
+                <input type="text" class="col s9"
                     value=self.text
                     oninput=self.link.callback(|e: InputData| Msg::Input(e.value))
                 />
