@@ -47,18 +47,14 @@ jobs:
       working-directory: ./server
       run: cargo build
     - name: Run e2e
-      run: echo "HELLO"
-      # run: |
-      #   cd ./proxy
-      #   docker build -t proxy .
-      #   docker run --rm -d -p 80:80 proxy:latest
-      #   cd ..
-      #   ./server/target/debug/server &
-      #   s_pid=$!
-      #   cd ./full-app
-      #   ./node_modules/.bin/ws -d target/deploy/ &
-      #   cd ..
-      #   cd ./e2e/app
-      #   yarn
-      #   yarn test
-      #   kill $!
+      run: |
+        docker build -t proxy ./proxy
+        docker run --rm -d -p 80:80 proxy:latest
+        ./server/target/debug/server &
+        s_pid=$!
+        ./full-app/node_modules/.bin/ws -d ./full-app/target/deploy/ &
+        a_pid=$!
+        cd ./e2e/app
+        yarn
+        yarn test
+        kill $s_pid $a_pid
