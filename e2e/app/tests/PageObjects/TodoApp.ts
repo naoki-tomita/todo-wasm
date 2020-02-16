@@ -20,7 +20,7 @@ export class TodoApp {
   }
 
   completeTodoText() {
-    return this.page.click(`a.btn`);
+    return this.page.click(`button`);
   }
 
   async getTodoList() {

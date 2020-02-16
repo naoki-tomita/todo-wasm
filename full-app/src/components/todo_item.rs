@@ -37,11 +37,12 @@ impl Component for TodoItem {
     }
     fn view(&self) -> Html {
         html! {
-            <li class="collection-item">
-                <label>
-                    <input type="checkbox" checked=self.props.item.done onclick=self.link.callback(|_| Msg::Change) />
-                    <span>{ &self.props.item.text }</span>
-                </label>
+            <li
+                class={format!("card card__narrow clickable {}", if self.props.item.done {"checked"} else {""})}
+                style="margin-top: 12px"
+                onclick=self.link.callback(|_| Msg::Change)>
+                <input type="checkbox" checked=self.props.item.done />
+                <span>{ &self.props.item.text }</span>
             </li>
         }
     }

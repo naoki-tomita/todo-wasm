@@ -50,14 +50,13 @@ impl Component for TodoInput {
 
     fn view(&self) -> Html {
         html! {
-            <div class="row">
-                <input type="text" class="col s9"
+            <div class="card" style="display: flex;">
+                <input type="text" style="width: 70%"
                     value=self.text
                     oninput=self.link.callback(|e: InputData| Msg::Input(e.value))
                 />
-                <a class="col s3 waves-effect waves-light btn"
-                    onclick=self.link.callback(|_| Msg::Complete)
-                >{"ADD TODO"}</a>
+                <button type="button" style="width: 30%; margin-left: 12px" onclick=self.link.callback(|_| Msg::Complete)
+                >{"Create"}</button>
             </div>
         }
     }

@@ -41,11 +41,9 @@ impl Component for TodoList {
     }
     fn view(&self) -> Html {
         html! {
-            <div>
-                <ul class="collection">
-                    { for self.props.list.list.iter().map(|item| self.render_item(&item)) }
-                </ul>
-            </div>
+            <ul style="margin-top: 12px;">
+                { for self.props.list.list.iter().map(|item| self.render_item(&item)) }
+            </ul>
         }
     }
 }
