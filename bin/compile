@@ -22,15 +22,15 @@ else
     ./rustup.sh -y --default-toolchain nightly
     rm rustup.sh
 fi
+if [ ! -x "$CARGO_HOME/bin/rustc" ]; then
+  echo "failed: Cannot find Rust binaries at $CARGO_HOME"
+  exit 1
+fi
 
 if [ ! -x "cargo web -V" ]; then
   cargo install cargo-web
 fi
 
-if [ ! -x "$CARGO_HOME/bin/rustc" ]; then
-  echo "failed: Cannot find Rust binaries at $CARGO_HOME"
-  exit 1
-fi
 
 # This is where we will cache our Rust output.  Note the suggestions at
 # https://github.com/alexcrichton/cargo/commit/014765f788ca1c2476936835ca32cc2746f99b42
