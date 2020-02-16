@@ -1,5 +1,4 @@
 use super::{systems, todos};
-use rocket::config::{Config, Environment};
 
 pub fn start_server() {
     rocket::ignite()
