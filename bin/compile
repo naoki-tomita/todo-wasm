@@ -25,6 +25,7 @@ install_nodejs() {
   rm -rf "$BUILD_DIR"/.heroku/node/*
   mv /tmp/node-v12.16.0-"$(get_os)"-"$(get_cpu)"/* "$BUILD_DIR"/.heroku/node
   chmod +x "$BUILD_DIR"/.heroku/node/bin/*
+  export PATH="$BUILD_DIR/.heroku/node/bin":$PATH
 }
 
 # Switch to our cache directory.
