@@ -52,7 +52,11 @@ export CARGO_TARGET_DIR="$CACHE_DIR/target"
 echo "-----> Building SERVER application using Cargo"
 cd $BUILD_DIR/server
 cargo build --release
+mkdir -p target/release
+cp $CARGO_TARGET_DIR/release/server target/release
 
 echo "-----> Building FRONT application using Cargo"
 cd $BUILD_DIR/full-app
 cargo web deploy
+mkdir -p target/deploy
+cp -r $CARGO_TARGET_DIR/deploy/* target/deploy
