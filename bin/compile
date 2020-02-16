@@ -16,11 +16,8 @@ get_cpu() {
 }
 
 install_nodejs() {
-  local code os cpu resolve_result
-  RESOLVE="$BP_DIR/vendor/resolve-version-$(get_os)"
-  resolve_result=$($RESOLVE "node" "12.x")
-  read -r number url < <(echo "$resolve_result")
-
+  local code
+  url=https://nodejs.org/dist/v12.16.0/node-v12.16.0-"$(get_os)"-$(get_cpu).tar.xz
   code=$(curl "$url" -L --silent --fail --retry 5 --retry-max-time 15 -o /tmp/node.tar.gz --write-out "%{http_code}")
   tar xzf /tmp/node.tar.gz -C /tmp
 
