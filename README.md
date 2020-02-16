@@ -3,7 +3,7 @@
 # todo-wasm
 Todo app with WebAssembly
 
-[demo](https://webassembly-todo-app.herokuapp.com/)
+[demo](https://webassembly-todo-app.herokuapp.com/)(herokuなので、我慢が必要です。)
 
 # Server
 
