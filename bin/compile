@@ -19,7 +19,7 @@ else
     curl https://sh.rustup.rs -sSf > rustup.sh
     chmod u+x rustup.sh
     echo "-----> Using rustup to install Rust channel $VERSION"
-    ./rustup.sh -y --default-toolchain "$VERSION"
+    ./rustup.sh -y --default-toolchain nightly
     rm rustup.sh
 fi
 
