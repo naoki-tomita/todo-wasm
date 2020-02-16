@@ -53,5 +53,6 @@ echo "-----> Building SERVER application using Cargo"
 cd $BUILD_DIR/server
 cargo build --release
 
+echo "-----> Building FRONT application using Cargo"
 cd $BUILD_DIR/full-app
 cargo web deploy
