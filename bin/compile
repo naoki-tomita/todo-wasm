@@ -63,6 +63,9 @@ install_npm() {
 
 
 
+export PATH="$HOME/.heroku/node/bin:$HOME/.heroku/yarn/bin:$PATH:$HOME/bin:$HOME/node_modules/.bin"
+export NODE_HOME="$HOME/.heroku/node"
+export NODE_ENV=${NODE_ENV:-production}
 
 # Switch to our cache directory.
 mkdir -p "$CACHE_DIR"
@@ -122,5 +125,7 @@ cargo web deploy
 mkdir -p target/deploy
 cp -r $CARGO_TARGET_DIR/deploy/* target/deploy
 
-install_nodejs
-install_npm
+mkdir -p $BUILD_DIR/.heroku/node
+install_nodejs 12 $BUILD_DIR/.heroku/node
+# mkdir -p $BUILD_DIR/.heroku/npm
+# install_npm 6 $BUILD_DIR/.heroku/node false
