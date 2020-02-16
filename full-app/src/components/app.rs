@@ -97,7 +97,7 @@ impl App {
 
     fn register_data(&mut self, text: String) {
         let json = &json!({ "text": text });
-        let request = Request::post("http://localhost/v1/todos")
+        let request = Request::post("/v1/todos")
             .body(Json(json))
             .expect("Failed to build request.");
 
@@ -114,7 +114,7 @@ impl App {
         match self.todos.find(id) {
             Some(it) => {
                 let json = &json!({ "done": !it.done });
-                let request = Request::put(format!("http://localhost/v1/todos/{}", id))
+                let request = Request::put(format!("/v1/todos/{}", id))
                     .body(Json(json))
                     .expect("Failed to build request.");
 
