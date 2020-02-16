@@ -3,6 +3,8 @@
 # todo-wasm
 Todo app with WebAssembly
 
+[demo](https://webassembly-todo-app.herokuapp.com/)
+
 # Server
 
 * Rust
