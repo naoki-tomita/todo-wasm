@@ -1,28 +1,45 @@
 #!/usr/bin/env bash
-indent() {
-    sed -u 's/^/      /'
-}
+BUILD_DIR=${1:-}
+CACHE_DIR=${2:-}
+ENV_DIR=${3:-}
 
-BUILD_DIR="$1"
-CACHE_DIR="$2"
-ENV_DIR="$3"
-STAGE="$(mktemp -d)"
+# Switch to our cache directory.
+mkdir -p "$CACHE_DIR"
+cd "$CACHE_DIR"
 
-if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
-    echo "APP_BASE was not set. Aborting" | indent
-    exit 1
-fi
-APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
-
-(
-    mv "${BUILD_DIR}/${APP_BASE}" "${STAGE}" &&
-    rm -rf "${BUILD_DIR}" &&
-    mv "${STAGE}/$(basename "$APP_BASE")" "${BUILD_DIR}"
-)
-
-if [ $? -ne 0 ]; then
-    echo "FAILED to copy directory into place" | indent
-    exit 1
+echo "-----> Setup for rust environment"
+if [ -d "$CARGO_HOME" ]; then
+    echo "-----> Checking for new releases of Rust nightly channel"
+    # It's possible that $VERSION has changed, or the `stable` channel has updated.
+    rustup self update
+    rustup update nightly
+    rustup default nightly
+else
+    echo "-----> Downloading rustup"
+    curl https://sh.rustup.rs -sSf > rustup.sh
+    chmod u+x rustup.sh
+    echo "-----> Using rustup to install Rust channel $VERSION"
+    ./rustup.sh -y --default-toolchain "$VERSION"
+    rm rustup.sh
 fi
 
-echo "Copied ${APP_BASE} to root of app successfully" | indent
+if [ ! -x "cargo web -V" ]; then
+  cargo install cargo-web
+fi
+
+if [ ! -x "$CARGO_HOME/bin/rustc" ]; then
+  echo "failed: Cannot find Rust binaries at $CARGO_HOME"
+  exit 1
+fi
+
+# This is where we will cache our Rust output.  Note the suggestions at
+# https://github.com/alexcrichton/cargo/commit/014765f788ca1c2476936835ca32cc2746f99b42
+# which describe how this needs to be named.
+export CARGO_TARGET_DIR="$CACHE_DIR/target"
+
+echo "-----> Building SERVER application using Cargo"
+cd $BUILD_DIR/server
+cargo build --production
+
+cd $BUILD_DIR/full-app
+cargo web deploy
