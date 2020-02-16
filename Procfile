@@ -1,2 +1,2 @@
 release: cd ./server && cargo build --release
-web: ./server/target/release/server
+web: ROCKET_PORT=$PORT ./server/target/release/server

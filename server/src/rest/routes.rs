@@ -4,7 +4,6 @@ use rocket::config::{Config, Environment};
 pub fn start_server() {
     let config = Config::build(Environment::Staging)
         .address("0.0.0.0")
-        .port(8001)
         .finalize()
         .unwrap();
 
