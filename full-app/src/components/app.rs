@@ -76,7 +76,7 @@ impl Component for App {
 
 impl App {
     fn load(&mut self) {
-        let request = Request::get("http://localhost/v1/todos")
+        let request = Request::get("/v1/todos")
             .body(Nothing)
             .expect("Failed to build request.");
 
