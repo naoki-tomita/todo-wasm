@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+BUILD_DIR=${1:-}
+CACHE_DIR=${2:-}
+ENV_DIR=${3:-}
+
+get_os() {
+  uname | tr '[:upper:]' '[:lower:]'
+}
+
+get_cpu() {
+  if [[ "$(uname -p)" = "i686" ]]; then
+    echo "x86"
+  else
+    echo "x64"
+  fi
+}
+
+install_nodejs() {
+  local code
+  url=https://nodejs.org/dist/v12.16.0/node-v12.16.0-"$(get_os)"-"$(get_cpu)".tar.xz
+  code=$(curl "$url" -L --silent --fail --retry 5 --retry-max-time 15 -o /tmp/node.tar.xz --write-out "%{http_code}")
+  tar Jxf /tmp/node.tar.xz -C /tmp
+
+  mkdir -p "$BUILD_DIR"/.heroku/node
+  rm -rf "$BUILD_DIR"/.heroku/node/*
+  mv /tmp/node-v12.16.0-"$(get_os)"-"$(get_cpu)"/* "$BUILD_DIR"/.heroku/node
+  chmod +x "$BUILD_DIR"/.heroku/node/bin/*
+  export PATH="$BUILD_DIR/.heroku/node/bin":$PATH
+}
+
+# Switch to our cache directory.
+mkdir -p "$CACHE_DIR"
+cd "$CACHE_DIR"
+
+BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
+cat <<EOF > $BP_DIR/export
+# Our rustup installation.
+export RUSTUP_HOME="$CACHE_DIR/multirust"
+# Our cargo installation.  We implicitly trust Rustup and Cargo
+# to do the right thing when new versions are released.
+export CARGO_HOME="$CACHE_DIR/cargo"
+# Include binaries installed by cargo and rustup in our path.
+PATH="\$CARGO_HOME/bin:\$PATH"
+EOF
+. $BP_DIR/export
+
+echo "-----> Setup for rust environment"
+if [ -d "$CARGO_HOME" ]; then
+    echo "-----> Checking for new releases of Rust nightly channel"
+    # It's possible that $VERSION has changed, or the `stable` channel has updated.
+    rustup self update
+    rustup update nightly
+    rustup default nightly
+else
+    echo "-----> Downloading rustup"
+    curl https://sh.rustup.rs -sSf > rustup.sh
+    chmod u+x rustup.sh
+    echo "-----> Using rustup to install Rust channel $VERSION"
+    ./rustup.sh -y --default-toolchain nightly
+    rm rustup.sh
+fi
+if [ ! -x "$CARGO_HOME/bin/rustc" ]; then
+  echo "failed: Cannot find Rust binaries at $CARGO_HOME"
+  exit 1
+fi
+
+if [ ! -x "cargo web -V" ]; then
+  cargo install cargo-web
+fi
+
+
+# This is where we will cache our Rust output.  Note the suggestions at
+# https://github.com/alexcrichton/cargo/commit/014765f788ca1c2476936835ca32cc2746f99b42
+# which describe how this needs to be named.
+export CARGO_TARGET_DIR="$CACHE_DIR/target"
+
+echo "-----> Building SERVER application using Cargo"
+cd $BUILD_DIR/server
+cargo build --release
+mkdir -p target/release
+cp $CARGO_TARGET_DIR/release/server target/release
+
+echo "-----> Building FRONT application using Cargo"
+cd $BUILD_DIR/full-app
+cargo web deploy
+mkdir -p target/deploy
+cp -r $CARGO_TARGET_DIR/deploy/* target/deploy
+
+install_nodejs
