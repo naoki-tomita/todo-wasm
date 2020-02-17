@@ -43,7 +43,7 @@ jobs:
       run: cargo test --verbose
     - name: Run e2e
       run: |
-        ./server/target/debug/server &
+        ROCKET_PORT=8001 ROCKET_ADDRESS=0.0.0.0 ./server/target/debug/server &
         pid=$!
         cd ./e2e/server
         yarn

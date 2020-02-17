@@ -60,7 +60,7 @@ jobs:
       run: |
         docker build -t proxy ./proxy
         docker run --rm -d -p 80:80 proxy:latest
-        ./server/target/debug/server &
+        ROCKET_PORT=8001 ROCKET_ADDRESS=0.0.0.0 ./server/target/debug/server &
         s_pid=$!
         ./full-app/node_modules/.bin/ws -d ./full-app/target/deploy/ &
         a_pid=$!
