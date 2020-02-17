@@ -1,1 +1,0 @@
-web: env ROCKET_PORT=$PORT env ROCKET_ADDRESS=0.0.0.0 ./target/release/server
