@@ -1,0 +1,145 @@
+body {
+  background-color: #EBECF0;
+  text-align: center;
+  justify-content: center;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  margin: auto;
+  max-width: 720px;
+}
+
+button:focus {
+  outline:none !important;
+}
+
+button {
+  font-size: 20px;
+  border: none;
+  padding: 10px 40px;
+  border-radius: 12px;
+  color: #6D7587;
+  background-color: #EBECF0;
+  /*box-shadow: 3px 4px 6px 1px rgba(0, 0, 0, 0.3),
+              -2px -2px 4px 2px rgba(255, 255, 255, 1),
+              inset -14px -14px 20px -10px rgba(0, 0, 0, 0.1),
+              inset 14px 14px 20px -10px rgba(255, 255, 255, 0.5) !important;  */
+  box-shadow: 7px 7px 15px rgba(55, 84, 170, .15),
+              -7px -7px 20px rgba(255, 255, 255, 1),
+              inset 0px 0px 4px rgba(255, 255, 255, .2),
+              inset 7px 7px 15px rgba(55, 84, 170, 0),
+              inset -7px -7px 20px rgba(255, 255, 255, 0),
+              0px 0px 4px rgba(255, 255, 255, 0) !important;
+  transition: box-shadow .25s ease !important;
+}
+
+button:active {
+  box-shadow: 7px 7px 15px rgba(55, 84, 170, .15),
+              -7px -7px 20px rgba(255, 255, 255, 1),
+              inset 0px 0px 4px rgba(255, 255, 255, 0),
+              inset 7px 7px 15px rgba(55, 84, 170, .15),
+              inset -7px -7px 20px rgba(255, 255, 255, 1),
+              0px 0px 4px rgba(255, 255, 255, .2) !important;
+}
+
+.text {
+  color: #a3aab9;
+  margin: auto 30px;
+  font-size: 22px;
+}
+
+input[type="checkbox"] {
+  padding: 20px;
+  position: relative;
+  margin: 0 5px;
+  transition: all .25s ease;
+}
+
+input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #a3aab9;
+  background: transparent;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all .25s ease;
+}
+
+li.checked {
+  text-decoration: line-through #8D96A8;
+  box-shadow: 7px 7px 15px rgba(55, 84, 170, .15),
+              -7px -7px 20px rgba(255, 255, 255, 1),
+              inset 0px 0px 4px rgba(255, 255, 255, 0),
+              inset 7px 7px 15px rgba(55, 84, 170, .15),
+              inset -7px -7px 20px rgba(255, 255, 255, 1),
+              0px 0px 4px rgba(255, 255, 255, .2) !important;
+}
+
+input[type="checkbox"]:checked::after {
+  background-color: #a3aab9;
+}
+
+.clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.card {
+  display: block;
+  background-color: #EBECF0;
+  padding: 40px;
+  box-shadow: 7px 7px 15px rgba(55, 84, 170, .15),
+              -7px -7px 20px rgba(255, 255, 255, 1),
+              0px 0px 4px rgba(255, 255, 255, .2) !important;
+  border-radius: 30px;
+}
+
+li.card__narrow:first-child {
+  border-radius: 15px 15px 10px 10px;
+}
+
+li.card__narrow:last-child {
+  border-radius: 10px 10px 15px 15px;
+}
+
+.card__narrow {
+  padding: 12px;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.card span {
+  text-align: start;
+  color: #8D96A8;
+}
+
+.label {
+  color: #868b98;
+  display: block;
+  text-align: start;
+  margin: 25px 10px 5px;
+}
+
+input {
+  font-size: 22px;
+  background-color: #EBECF0;
+  border-radius: 10px;
+  border: 3px solid #f3f4f7;
+  box-shadow: 2px 2px 3px rgba(55, 84, 170, .15),
+              inset 0px 0px 4px rgba(255, 255, 255, 0),
+              inset 7px 7px 15px rgba(55, 84, 170, .15),
+              inset -7px -7px 20px rgba(255, 255, 255, 1),
+              0px 0px 4px rgba(255, 255, 255, .2) !important;
+  padding: 5px 15px;
+  outline: none !important;
+  color: #535D74;
+}
