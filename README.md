@@ -15,7 +15,7 @@ Todo app with WebAssembly
 
 * Rust 
 * yew
-* materialize
+* neumorphism design
 
 # E2E
 ## Server
