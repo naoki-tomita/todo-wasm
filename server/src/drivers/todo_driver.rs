@@ -1,5 +1,5 @@
 use crate::error::{Error, ErrorKind};
-use std::sync::RwLock;
+use std::sync::{RwLock};
 
 lazy_static! {
     // RwLockでGlobalな変数に書き込み、読み込みができるようにする
@@ -11,7 +11,7 @@ lazy_static! {
 pub fn get_todos() -> Result<Vec<TodoEntity>, Error> {
     // cloneしないと、DATUMを消費してしまう？
     // readで読み取り専用でアクセスできる
-    Ok(DATUM.read().unwrap().clone())
+    Ok(DATUM.read()?.clone())
 }
 
 pub fn register(text: String, done: bool) -> Result<TodoEntity, Error> {
@@ -36,7 +36,7 @@ pub fn update(id: usize, text: Option<String>, done: Option<bool>) -> Result<Tod
             text: text.map_or((*todo).text.clone(), |t| t),
             done: done.map_or((*todo).done, |d| d),
         };
-        return Ok((*todo).clone());
+        return Ok(todo.clone());
     }
     Err(Error::from(ErrorKind::NotFound))
 }

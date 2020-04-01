@@ -34,8 +34,8 @@ impl IdentifiedTodos {
     fn from(values: Vec<TodoEntity>) -> Self {
         IdentifiedTodos::new(
             values
-                .iter()
-                .map(|it| IdentifiedTodo::from(it.clone()))
+                .into_iter()
+                .map(|it| IdentifiedTodo::from(it))
                 .collect(),
         )
     }

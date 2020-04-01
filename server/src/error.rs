@@ -1,3 +1,6 @@
+use crate::drivers::todo_driver::TodoEntity;
+use std::sync::RwLockReadGuard;
+use std::sync::PoisonError;
 use failure::_core::fmt;
 use failure::_core::fmt::Display;
 use failure::{Context, Fail};
@@ -44,6 +47,12 @@ impl From<ErrorKind> for Error {
 impl From<Context<ErrorKind>> for Error {
     fn from(inner: Context<ErrorKind>) -> Error {
         Error { inner }
+    }
+}
+
+impl From<PoisonError<RwLockReadGuard<'_, Vec<TodoEntity>>>> for Error {
+    fn from(_inner: PoisonError<RwLockReadGuard<'_, Vec<TodoEntity>>>) -> Error {
+        Error { inner: Context::new(ErrorKind::NotFound) }
     }
 }
 
