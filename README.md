@@ -4,6 +4,7 @@
 Todo app with WebAssembly
 
 [demo](https://webassembly-todo-app.herokuapp.com/)(herokuなので、我慢が必要です。)
+(どっかのタイミングで仕様が変わったっぽくて、動きません。)
 
 # Server
 
