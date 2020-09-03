@@ -30,7 +30,7 @@ pub struct TodoUpdateJson {
 }
 
 lazy_static! {
-    static ref TODO_PORT: TodoGateway = { TodoGateway {} };
+    static ref TODO_PORT: TodoGateway = TodoGateway {};
 }
 
 #[get("/todos")]
