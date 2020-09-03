@@ -93,5 +93,5 @@ export default class TodosSteps {
 	public async switchStatus(indexText: string) {
     const index = parseInt(indexText, 10);
     await this.app.switchStatus(index);
-	}
+  }
 }
