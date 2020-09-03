@@ -44,7 +44,7 @@ jobs:
         key: e2e-app-node_modules-${{ hashFiles('e2e/app/yarn.lock') }}
     - uses: hecrj/setup-rust-action@v1
       with:
-        rust-version: stable
+        rust-version: nightly
     - name: install cargo web
       run: cargo install cargo-web || true
     - name: install local-web-server
