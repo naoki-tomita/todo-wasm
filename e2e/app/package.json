@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Starter template for writing TypeScript tests for Gauge",
   "dependencies": {
-    "@getgauge/cli": "^1.0.7",
+    "@getgauge/cli": "latest",
     "@types/node-fetch": "^2.5.4",
     "@types/puppeteer": "^2.0.0",
     "gauge-ts": "latest",
