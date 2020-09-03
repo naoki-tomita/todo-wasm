@@ -34,7 +34,7 @@ jobs:
         key: e2e-server-node_modules-${{ hashFiles('e2e/server/yarn.lock') }}
     - uses: hecrj/setup-rust-action@v1
       with:
-        rust-version: nightly
+        rust-version: stable
     - name: Build
       working-directory: ./server
       run: cargo build
