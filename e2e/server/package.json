@@ -5,7 +5,7 @@
   "dependencies": {
     "@getgauge/cli": "latest",
     "gauge-ts": "latest",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "ts-node": "latest",
     "typescript": "latest"
   },
